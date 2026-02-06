@@ -7,54 +7,44 @@
 </head>
 <body>
     <h4>To do list</h4>
+    <form action="unsubmit">
     <table>
         <tbody>
-            <input type="text" id="task" placeholder="Enter your task here"><br><br>
-            <button onclick="return confirm('Are you sure you want to add a new task?')" onclick=addTask() id="new" >Add Task</button>
+            
+              <input type="text" id="task" placeholder="Enter your task here"><br><br>
+              <button id="new" >Add Task</button>
+            
          <script>
-            const newTask = [];
+            
 
             class Task {
-            constructor(newTaskId, newTask, newTaskStatus){
+             constructor(newTaskId, newTask, newTaskStatus){
+                let Task = [];
                 this.newTaskId = newTaskId;
                 this.newTask = newTask;
                 this.newTaskStatus = newTaskStatus;
-            }
+             }   
 
-            create(newTaskId, newTask, newTaskStatus){
-                console.log(newTaskId, newTask, newTaskStatus);
-            }
-
-            edit(newTaskId, newTask, newTaskStatus){
-                console.log(newTaskId, newTask, newTaskStatus);
-            }
-
-            delete(){
-                console.log("Task deleted");
-            }
-            }
-
-            function addTask(){
+             addTask(){
                 for (let i=0; i<newTask.length; i++){
                     newTask.push(document.getElementById("task").value);
                 }
-            }
+              }
 
-            function displayTasks(){
-                for (let i=0; i<newTask.length; i++){
+              displayTasks(){
+                 for (let i=0; i<newTask.length; i++){
                     document.write(`<tr><td>${newTask[i]}</td></tr>`);
-                }
-            }
+                 }
+               }
 
-            displayTasks();
-
-            function clearTasks(){
+              clearTasks(){
                 newTask.length = 0;
-            }
+              }
 
-            clearTasks();
+            }
          </script>
         </tbody>
     </table>    
+    </form>
 </body>
 </html>
