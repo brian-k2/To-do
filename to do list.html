@@ -31,15 +31,26 @@
             }
 
             function addTask(){    
+                let taskInput = document.getElementById("task").value;
+                let taskId = newTask.length + 1;
+                let taskStatus = "incomplete";
+
+                let task = new Task(taskId, taskInput, taskStatus);
+                newTask.push(task);
+                displayTasks();
             }
 
-            function displayTasks(){
-                for (let i=0; i<newTask.length; i++){
-                    document.write(`<tr><td>${newTask[i]}</td></tr>`);
-                }
-            }
+            function displayTasks(id){
+                let taskList = document.getElementById("taskList");
+                taskList.innerHTML = "";
 
-            displayTasks();
+                for(let i=0; i<newTask.length; i++){
+                    let taskItem = document.createElement("li");
+                    taskItem.textContent = newTask[i].task;
+                    taskList.appendChild(taskItem);
+                    
+                }   
+            }
 
          </script>    
 </body>
