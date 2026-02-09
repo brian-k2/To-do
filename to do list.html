@@ -7,80 +7,94 @@
 </head>
 <body>
     <h4>To do list</h4>
-    <input type="text" id="task" placeholder="Enter your task here"><br><br>
-    <button onclick=addTask()>Add Task</button>
-    <ol id="taskList"></ol>
+    <form onsubmit="Task1.addTask(event)">  
+        <input type="text" id="task" name="title" placeholder="Enter your task here"><br>
+        <input type="text" id="description" name="description" placeholder="Enter task description"><br>
+        <button id="addTaskBtn" type="submit">Add Task</button>
+    </form>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        <tbody id="taskList"></tbody>
+    </table>
 
     <script>
-        let newTask = [];
-
         class Task {
-            constructor(taskId, task, taskStatus){
-                this.taskId = taskId;
-                this.task = task;
-                this.taskStatus = taskStatus;
+            constructor(){
+                this.taskList = [];
             }
 
-            edit(newText){
-                this.task = newText;
-                console.log("Task edited:", this.task);
+            addTask(e){
+                console.log("Adding task...",e);
+                let people = ["Charles", "Alice", "Bob"];
+                let otherpeople = ["David", "Eve"];
+                let allPeople = [...people, ...otherpeople];
+                console.log("People array:", people);
+                e.preventDefault();
+                let taskInput = document.getElementById("task").value;
+                let taskId = this.taskList.length + 1;
+                let task = {
+                    id: taskId,
+                    title: taskInput,
+                    description: document.getElementById("description").value,
+                    completed: false
+                }
+
+                //new task instance
+                this.taskList.push(task);
+                console.log("Task added:", task);
+                this.displayTasks();
             }
 
-            delete(){
-                console.log("Task deleted");
+            //edit task method
+            editTask(taskId, newText){
+                let task = this.taskList.find(t => t.id === taskId);
+                if(task){
+                    task.title = newText;
+                    this.displayTasks();
+                }
+            }
+
+            //delete task method
+            deleteTask(id){
+                console.log("Task deleted with id:", id);
+                this.taskList = this.taskList.filter(t => t.id !== id);
+                this.displayTasks();
+            }
+
+            //display tasks method
+             displayTasks(id){
+                let taskListElem = document.getElementById("taskList");
+                taskListElem.innerHTML = "";
+
+                for(let i=0; i<this.taskList.length; i++){
+                    let taskItem = document.createElement("tr");
+                    taskItem.innerHTML = `
+                        <td>${this.taskList[i].id}</td>
+                        <td>${this.taskList[i].title}</td>
+                        <td>${this.taskList[i].description}</td>
+                    `;
+                    taskListElem.appendChild(taskItem);
+
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Edit';
+                    editBtn.onclick = () => this.editTask(this.taskList[i].id, this.taskList[i].title);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = "Delete";
+                    deleteBtn.onclick = () => this.deleteTask(this.taskList[i].id);
+
+                    taskItem.appendChild(editBtn);
+                    taskItem.appendChild(deleteBtn);
+                }   
             }
         }
 
-        function addTask(){    
-            let taskInput = document.getElementById("task").value;
-            let taskId = newTask.length + 1;
-            let taskStatus = "incomplete";
-
-            //new task instance
-            let task = new Task(taskId, taskInput, taskStatus);
-            newTask.push(task);
-            displayTasks();
-        }
-
-        //edit task function
-        function editTask(taskId, newText){
-            let task = newTask.find(t => t.taskId === taskId);
-            if(task){
-                const newText = prompt("Enter new task text:", task.task);
-                task.edit(newText);
-                displayTasks();
-            }
-        }
-
-        //delete task function
-        function deleteTask(id){
-            newTask = newTask.filter(t => t.taskId !== id);
-            console.log("Task deleted with id:", id);
-            displayTasks();
-        }
-
-        //display tasks function
-        function displayTasks(id){
-            let taskList = document.getElementById("taskList");
-            taskList.innerHTML = "";
-
-            for(let i=0; i<newTask.length; i++){
-                let taskItem = document.createElement("li");
-                taskItem.textContent = newTask[i].task;
-                taskList.appendChild(taskItem);
-
-                const editBtn = document.createElement('button');
-                editBtn.textContent = 'Edit';
-                editBtn.onclick = () => editTask(newTask[i].taskId, newTask[i].newText);
-
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = "Delete";
-                deleteBtn.onclick = () => deleteTask(newTask[i].taskId);
-                taskItem.appendChild(editBtn);
-                taskItem.appendChild(deleteBtn);
-        }
-        }
-
-    </script>    
+        const Task1 = new Task();
+    </script>      
 </body>
 </html>
